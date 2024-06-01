@@ -4,15 +4,15 @@ public class CustomerDTO {
 
     CustomerDAO dao = new CustomerDAO();
 
-    private int no;
-    private String Sno;
-    private String id;
-    private String name;
-    private String phone;
-    private String regD;
-    private String exD;
-    private int period;
-    private String warning;
+    private int no;//화원 번호
+    private String Sno;//락커번호
+    private String id;//아이디
+    private String name;//이름
+    private String phone;//전화번호
+    private String regD;//등록일
+    private String exD;//만료일
+    private int period;//남은기간
+    private String warning;//만료임박
 
 
     public int getNo() {
@@ -86,8 +86,7 @@ public class CustomerDTO {
         this.warning = warning;
     }
 
-    public CustomerDTO() {
-    }
+    public CustomerDTO() {}
 
     public CustomerDTO(int no, String Sno, String id, String name,String phone,
                        String regD, String exD, int period, String warning ) {

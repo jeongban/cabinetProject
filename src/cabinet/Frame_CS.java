@@ -14,11 +14,11 @@ import javax.swing.table.*;
 public class Frame_CS extends JFrame {
 
 
-    JTabbedPane jtp = new JTabbedPane();
+    JTabbedPane jtp = new JTabbedPane();//탭을 생성
 
-    JPanel contentPane2 = new JPanel();
+    JPanel contentPane2 = new JPanel();//panel생성
 
-
+    //텍스트가 적힌 라벨과 내용을 적을 필드 생성
     private final JLabel lblNewLabel = new JLabel("ROOM_NUMBER");
     private final JTextField tfRno = new JTextField();
     private final JLabel label = new JLabel("SEAT_NUMBER");
@@ -29,18 +29,20 @@ public class Frame_CS extends JFrame {
     private final JTextField tfId = new JTextField();
     private final JLabel label_3 = new JLabel("PERIOD");
     private final JTextField tfPeriod = new JTextField();
-
+    //스크롤 생성
     private final JScrollPane scrollPane = new JScrollPane();
+    //테이블(표) 생성
     private final JTable table = new JTable();
-
+    //버튼 생성
     private final JButton btAdd = new JButton("ADD");
     private final JButton btFind = new JButton("FIND");
     private final JButton btAll = new JButton("All");
     private final JButton btDel = new JButton("DELETE");
     private final JButton btCancel = new JButton("CANCEL");
-
+    //방 이름이 적힌 라벨 생성
     private final JLabel lblRoom = new JLabel("ROOM 410");
     private final JLabel lblRoom_1 = new JLabel("ROOM 420");
+    //pannel 생성
     private final JPanel panel_1 = new JPanel();
     private final JPanel panel_2 = new JPanel();
     private final JPanel panel_3 = new JPanel();
@@ -49,7 +51,7 @@ public class Frame_CS extends JFrame {
     private final JPanel panel_6 = new JPanel();
     private final JPanel panel_7 = new JPanel();
     private final JPanel panel_8 = new JPanel();
-
+    //버튼을 배열로 생성
     private final JButton[] buttons_410_1 = new JButton[10];
     private final JButton[] buttons_410_2 = new JButton[10];
     private final JButton[] buttons_410_3 = new JButton[10];
@@ -57,7 +59,7 @@ public class Frame_CS extends JFrame {
     private final JButton[] buttons_420 = new JButton[10];
 
 
-    SeatDTO dto=new SeatDTO();
+    SeatDTO dto=new SeatDTO();//좌석 정보를 생성
     SeatDAO dao=new SeatDAO();
     DefaultTableModel model
             =new DefaultTableModel();

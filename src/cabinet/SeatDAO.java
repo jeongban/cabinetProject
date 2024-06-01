@@ -14,29 +14,29 @@ import java.util.Vector;
 //import util.DBClose;
 
 public class SeatDAO {
-    Connection con;
-    Statement st;
-    PreparedStatement ps;
-    ResultSet rs = null;
+    Connection con;//데이터베이스와의 연결을 해주는 객체
+    Statement st;//정적 sql문을 실행하기 위한 객체
+    PreparedStatement ps;//미리 컴파일 된 sql문을 실행하기 위한 객체
+    ResultSet rs = null;//쿼리의 결과를 보유하는 객체
 
 
-    public void dbConnect() throws SQLException{
+    public void dbConnect() throws SQLException{//sql과 연결해주는 메소드
 
         con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cabinet", "root", "1234");
-        System.out.println("DB Connected...");
+        System.out.println("DB Connected...");//연결에 성공하면 출력
     }
 
-    public int updateSeatInfo(SeatDTO dto) {
-        String sql = "UPDATE STUDYROOM_2 SET STATE = ?, "
+    public int updateSeatInfo(SeatDTO dto) {//좌석의 정보를 받아서 좌석 설정을 수정하는 기능
+        String sql = "UPDATE STUDYROOM_2 SET STATE = ?, "//STUDYROOM_2 테이블에서 STATE, ID, PERIOD, SNUMBER를 입력 받아 STATE, ID, PERIOD값을 변경한다.
                 +"ID = ?,PERIOD = ? WHERE SNUMBER = ?";
         int result = 0;
         try {
             ps = con.prepareStatement(sql);
-            ps.setString(1,"사용중");
-            ps.setString(2, dto.getId());
-            ps.setString(3, dto.getPeriod()+"");
-            ps.setString(4, dto.getSno());
-            result = ps.executeUpdate();
+            ps.setString(1,"사용중");//state -> 사용중
+            ps.setString(2, dto.getId());//id -> 입력한 아이디
+            ps.setString(3, dto.getPeriod()+"");//PERIOD -> 입력한 문자열 period
+            ps.setString(4, dto.getSno());//SNUMBER -> 입력한 SNUMBER
+            result = ps.executeUpdate();//쿼리문 업데이트
         } catch (SQLException e) {
             e.printStackTrace(); // 예외 메시지 기록
             // 예외를 다시 throw하여 호출자에게 전달

@@ -1,11 +1,11 @@
 package cabinet;
 
 public class SeatDTO {
-    private String rno;
-    private String sno;
-    private String state;
-    private String id;
-    private int period;
+    private String rno;//방 번호
+    private String sno;//좌석번호
+    private String state;//사용유무
+    private String id;//id
+    private int period;//남은기간
 
 
     public String getRno() {
@@ -44,7 +44,7 @@ public class SeatDTO {
         return period;
     }
 
-    public void setPeriod(String Period) {
+    public void setPeriod(String Period) {//문자열로 받은 남은 기간을 정수형으로 변환해서 설정
         this.period = Integer.parseInt(Period);
     }
 

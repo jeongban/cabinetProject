@@ -13,41 +13,41 @@ import java.util.Vector;
 //import util.DBClose;
 
 public class CustomerDAO {
-    Connection con;
-    Statement st;
-    PreparedStatement ps;
-    ResultSet rs = null;
+    Connection con;//db와 연결해주는 객체
+    Statement st;//정적 sql문을 실행시켜주는 객체
+    PreparedStatement ps;//미리 컴파일된 sql문을 실행시켜주는 객체
+    ResultSet rs = null;//쿼리문의 결과를 보유하는 객체
 
 
-    public void dbConnect() throws SQLException{
+    public void dbConnect() throws SQLException{//sql과 연결해주는 메소드
         con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cabinet", "root", "1234");
-        System.out.println("DB Connected...");
+        System.out.println("DB Connected...");//연결 성공하면 출력
     }
 
 
-    public int insertMember(CustomerDTO dto) {
+    public int insertMember(CustomerDTO dto) {//회원을 추가하는 메소드
 
-        String sql = "INSERT INTO STUDYROOM_1 VALUES(null, ?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO STUDYROOM_1 VALUES(null, ?,?,?,?,?,?,?,?)";//null자리는 자동증가되는 기본키 필드이고, ? 자리는 입력값을 받을 자리 표시자
 
         int result = 0;
         try {
-            ps = con.prepareStatement(sql);
-            ps.setString(1, dto.getSno());
-            ps.setString(2, dto.getId());
-            ps.setString(3, dto.getName());
-            ps.setString(4, dto.getPhone());
-            ps.setString(5, dto.getRegD());
-            ps.setString(6, dto.getExD());
-            ps.setInt(7, dto.getPeriod());
-            ps.setString(8, dto.getWarning());
-            result = ps.executeUpdate();
+            ps = con.prepareStatement(sql);//sql문을 db에 연결
+            ps.setString(1, dto.getSno());//좌석번호
+            ps.setString(2, dto.getId());//아이디
+            ps.setString(3, dto.getName());//이름
+            ps.setString(4, dto.getPhone());//전화번호
+            ps.setString(5, dto.getRegD());//등록일
+            ps.setString(6, dto.getExD());//만료일
+            ps.setInt(7, dto.getPeriod());//남은 기간;
+            ps.setString(8, dto.getWarning());//만료임박
+            result = ps.executeUpdate();//sql쿼리를 실행하고 영향을 받은 행의 수를 result에 저장
 
         } catch (Exception e) {
         } finally {
             //DBClose.close(ps);
         }
 
-        return result;
+        return result;//영향을 받은 행의 수를 리턴
     }
 
     public boolean duplicateCheck(CustomerDTO dto) {
@@ -69,13 +69,14 @@ public class CustomerDAO {
 
     public int updateMember(CustomerDTO dto) {
 
-        String sql = "UPDATE STUDYROOM_1 SET REG_DATE = ?, EX_DATE=? WHERE id=?";
+        String sql = "UPDATE STUDYROOM_1 SET REG_DATE = ?, EX_DATE=?, period = ? WHERE id=?";
 
         try {
             ps = con.prepareStatement(sql);
             ps.setString(1, dto.getRegD());
             ps.setString(2, dto.getExD());
-            ps.setString(3, dto.getId());
+            ps.setInt(3,dto.getPeriod());
+            ps.setString(4, dto.getId());
             ps.executeUpdate();
 
         } catch (SQLException e) {
@@ -91,16 +92,6 @@ public class CustomerDAO {
         return 1;
     }
 
-    public void setPeriod(CustomerDTO dto) {
-
-        String sql = "UPDATE studyroom_1 set PERIOD = Round(EX_DATE-REG_DATE, 0)";
-        try {
-            ps = con.prepareStatement(sql);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("PERIOD계산 오류"+e.getMessage());
-        }
-    }
 
     public Customer_DateManager[] dateManager() {
 
@@ -160,7 +151,9 @@ public class CustomerDAO {
     }
 
     public CustomerDTO[] selectByName(String name) {
-        String sql= "SELECT * FROM STUDYROOM_1 WHERE name=?";
+        // 검색은 부분검색으로 like로 조건검색해야 사용성 측면에서 좋음 그리고 모든 검색창은 부분검색으로도 검색이 가능하게
+        String sql= "SELECT * FROM STUDYROOM_1 WHERE name LIKE ?";
+        name = STR."%\{name}%";
 
         try {
             ps = con.prepareStatement(sql);

@@ -2,6 +2,9 @@ package cabinet;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import javax.swing.*;
 import javax.swing.table.*;
 
@@ -12,11 +15,11 @@ import javax.swing.table.*;
 
 public class Frame_C extends JFrame {
 
-    JTabbedPane jtp = new JTabbedPane();
+    JTabbedPane jtp = new JTabbedPane();//탭 추가
 
-    static JPanel contentPane1 = new JPanel();
-
-    private final JLabel lblNewLabel = new JLabel("NO");
+    static JPanel contentPane1 = new JPanel();//customer의 정보를 관리하는 panel추가
+    //글씨가 적힌 label과 텍스트를 적을 textfield추가
+    private final JLabel lblNewLabel = new JLabel("NO");//
     private final JTextField tfNo = new JTextField();
     private final JLabel label = new JLabel("Sno");
     private final JTextField tfSno = new JTextField();
@@ -36,9 +39,12 @@ public class Frame_C extends JFrame {
     private final JTextField tfwarning = new JTextField();
 
     //////////////////////////////////////////////////////////
+    //스크롤 기능 추가
     private final JScrollPane scrollPane = new JScrollPane();
+    //테이블 표 추가
     private final JTable table = new JTable();
     //////////////////////////////////////////////////////////
+    //버튼 추가
     private final JButton btAdd = new JButton("ADD");
     private final JButton btUpdate = new JButton("UPDATE");
     private final JButton btFind = new JButton("FIND");
@@ -46,33 +52,33 @@ public class Frame_C extends JFrame {
     private final JButton btDel = new JButton("DELETE");
     private final JButton btCancel = new JButton("CANCEL");
 
-    SeatDAO Sdao = new SeatDAO();
-    CustomerDTO dto=new CustomerDTO();
-    CustomerDAO dao=new CustomerDAO();
+    CustomerDTO dto = new CustomerDTO();//customer의 정보를 설정하는 객체 추가
+    CustomerDAO dao = new CustomerDAO();//cutomer의 정보를 db랑 주고받는 객체 추가
     DefaultTableModel model
-            =new DefaultTableModel();
+            = new DefaultTableModel();//테이블 데이터 관리를 하는 객체 추가
 
-    public static final int NONE=0;
-    public static final int ADD=1;
-    public static final int DEL=2;
-    public static final int FIND=3;
-    public static final int ALL=4;
-    public static final int UPDATE=5;
+    public static final int NONE = 0;
+    public static final int ADD = 1;
+    public static final int DEL = 2;
+    public static final int FIND = 3;
+    public static final int ALL = 4;
+    public static final int UPDATE = 5;
 
-    int cmd=NONE;
-    private final JLabel lblBG = new JLabel("");
+    int cmd = NONE;
+    private final JLabel lblBG = new JLabel();//배경을 넣을 label추가
 
     public Frame_C() {
 
-        jtp.addTab("Customer", contentPane1);
+        jtp.addTab("Customer", contentPane1);//탭에 customer를 관리하는 panel을 추가
 
         start();
 
         try {
-            dao.dbConnect();
+            dao.dbConnect();//db랑 연결을 주고받을 메소드 실행
         } catch (Exception e) {
-            System.out.println("DB연결 실패"+e.getMessage());
+            System.out.println("DB연결 실패" + e.getMessage());
         }//db와 커넥션
+        //테이블 표 컬럼에 컬럼명 입력
         model.addColumn("회원번호");
         model.addColumn("락커번호");
         model.addColumn("아이디");
@@ -84,37 +90,40 @@ public class Frame_C extends JFrame {
         model.addColumn("만료임박");
 
         //model을 view와 연결---------
-        table.setModel(model);
+        table.setModel(model);//테이블에 model에서 입력받은 컬럼명을 표시한다
         table.getTableHeader().setBackground(
-                Color.PINK);
+                Color.PINK);//테이블의 헤더 배경색을 분홍
         table.getTableHeader().setForeground(
-                Color.DARK_GRAY);
-        table.getTableHeader().setReorderingAllowed(false);
-        table.setRowHeight(20);
+                Color.DARK_GRAY);//테이블 헤더 글씨색을 다크그레이
+        table.getTableHeader().setReorderingAllowed(false);//열의 재정렬을 불가능하게 설정
+        table.setRowHeight(20);//행의 높이를 20px로 설정
 
-        initialTf();
-        initGUI();
+        initialTf();//모든 텍스트 필드를 비활성화
+        initGUI();//gui화면 표출
 
     }
+
     private void start() {
-        addWindowListener(new WindowAdapter(){
-            public void windowClosing(WindowEvent e){
-                dao.close();
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                dao.close();//메모리 누수를 방지하기 위해 닫기
                 //db와 연결된 자원 반납
-                System.exit(0);
+                System.exit(0);//로그인 창 지우기
             }
         });
 
         table.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                System.out.println("mousePressed()");
-                int row=table.getSelectedRow();
-                setTitle(row+"행");
-                for(int i=0;i<8;i++){
+            public void mousePressed(MouseEvent e) {//테이블 표에서 마우스를 감지하면
+                System.out.println("mousePressed()");//출력
+                int row = table.getSelectedRow();//테이블의 선택한 행을 row에 입력
+                System.out.println("row : " + row + "행(");
+                setTitle(row + "행");//?
+
+                for (int i = 0; i < 8; i++) {
                     Object obj
-                            =table.getValueAt(row, i);
-                    String objStr=obj.toString();
-                    switch(i){
+                            = table.getValueAt(row, i);
+                    String objStr = obj.toString();
+                    switch (i) {
                         case 0:
                             tfNo.setText(objStr);
                             break;
@@ -152,13 +161,13 @@ public class Frame_C extends JFrame {
         btAdd.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Add actionPerformed()");
-                if(cmd!=ADD){  //모든 메뉴중에 ADD를 마우스로 클릭했을때
+                if (cmd != ADD) {  //모든 메뉴중에 ADD를 마우스로 클릭했을때
                     setEnabled(ADD);
                     tfSno.requestFocus();//커서
-                }else{
+                } else {
                     add();
                     setEnabled(NONE);
-                    cmd=NONE;
+                    cmd = NONE;
                     initialTf();
                     clearTf(); //입력하는 칸을 빈칸으로 만들어줌
                 }
@@ -168,13 +177,14 @@ public class Frame_C extends JFrame {
         btUpdate.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Update actionPerformed()");
-                if(cmd!=UPDATE){  //모든 메뉴중에 UPDATE를 마우스로 클릭했을때
+                if (cmd != UPDATE) {  //모든 메뉴중에 UPDATE를 마우스로 클릭했을때
                     setEnabled(UPDATE);
                     tfId.requestFocus();//커서
-                }else{
+
+                } else {
                     update();
                     setEnabled(NONE);
-                    cmd=NONE;
+                    cmd = NONE;
                     initialTf();
                     clearTf(); //입력하는 칸을 빈칸으로 만들어줌
                 }
@@ -184,12 +194,12 @@ public class Frame_C extends JFrame {
         btFind.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Find actionPerformed()");
-                if(cmd!=FIND){
+                if (cmd != FIND) {
                     setEnabled(FIND);
                     tfSno.requestFocus();
-                }else{
+                } else {
                     showData(FIND);
-                    cmd=NONE;
+                    cmd = NONE;
                     setEnabled(cmd);
                     initialTf();
                     clearTf();
@@ -201,7 +211,7 @@ public class Frame_C extends JFrame {
         btAll.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("All actionPerformed()");
-                cmd=ALL;
+                cmd = ALL;
                 setEnabled(cmd);
                 initialTf();
                 showData(ALL);
@@ -212,13 +222,13 @@ public class Frame_C extends JFrame {
         btDel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Delete actionPerformed()");
-                if(cmd!=DEL){
+                if (cmd != DEL) {
                     setEnabled(DEL);
                     tfId.requestFocus(); //커서
-                }else{
+                } else {
                     delete();//id로 삭제
                     setEnabled(NONE);
-                    cmd=NONE;
+                    cmd = NONE;
                     initialTf();
                     clearTf();
                 }
@@ -229,7 +239,7 @@ public class Frame_C extends JFrame {
         btCancel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("actionPerformed()");
-                cmd=NONE;
+                cmd = NONE;
                 setEnabled(cmd);
                 initialTf();
             }
@@ -242,7 +252,7 @@ public class Frame_C extends JFrame {
         contentPane1.setLayout(null);
 
         this.setResizable(true); //frame 크기 임의 설정(false)시 불가
-        this.setSize(1100,700); //frame 사이즈 설정 method
+        this.setSize(1100, 700); //frame 사이즈 설정 method
         this.setLocationRelativeTo(null);// 창 가운데 생성코드
 
 
@@ -332,10 +342,11 @@ public class Frame_C extends JFrame {
 
 
     }
-    /*tf들을 비활성화*/
-    public void initialTf(){
 
-        boolean b=false;
+    /*tf들을 비활성화*/
+    public void initialTf() {
+
+        boolean b = false;
         tfNo.setEditable(b);
         tfSno.setEditable(b);
         tfId.setEditable(b);
@@ -347,11 +358,12 @@ public class Frame_C extends JFrame {
         tfwarning.setEditable(b);
 
     }//initialTf()--------
-    /*tf의 편집 가능 여부를 결정하는 메소드*/
-    public void setEditable(int n){
 
-        boolean b=false;
-        switch(n){
+    /*tf의 편집 가능 여부를 결정하는 메소드*/
+    public void setEditable(int n) {
+
+        boolean b = false;
+        switch (n) {
             case ADD:
                 tfId.setEditable(!b);
                 tfSno.setEditable(!b);
@@ -359,15 +371,13 @@ public class Frame_C extends JFrame {
                 tfphone.setEditable(!b);
                 tfregD.setEditable(!b);
                 tfexD.setEditable(!b);
-                tfperiod.setEditable(!b);
                 tfwarning.setEditable(b);
                 break;
             case UPDATE:
                 tfId.setEditable(!b);
-                tfName.setEditable(!b);
                 tfregD.setEditable(!b);
                 tfexD.setEditable(!b);
-
+                break;
             case FIND://이름으로 검색
                 tfName.setEditable(!b);
                 break;
@@ -383,35 +393,37 @@ public class Frame_C extends JFrame {
 
     }//setEditable()---------
 
-    /**버튼의 활성화 여부를 결정하는 메소드*/
-    public void setEnabled(int n){
-        boolean b=false;
+    /**
+     * 버튼의 활성화 여부를 결정하는 메소드
+     */
+    public void setEnabled(int n) {
+        boolean b = false;
         this.intialBt(b);
-        switch(n){
+        switch (n) {
             case ADD:
                 btAdd.setEnabled(!b);
                 btCancel.setEnabled(!b);
-                cmd=ADD;
+                cmd = ADD;
                 break;
             case UPDATE:
                 btUpdate.setEnabled(!b);
                 btCancel.setEnabled(!b);
-                cmd=UPDATE;
+                cmd = UPDATE;
                 break;
             case DEL:
                 btDel.setEnabled(!b);
                 btCancel.setEnabled(!b);
-                cmd=DEL;
+                cmd = DEL;
                 break;
             case FIND:
                 btFind.setEnabled(!b);
                 btCancel.setEnabled(!b);
-                cmd=FIND;
+                cmd = FIND;
                 break;
             case ALL:
                 btAll.setEnabled(!b);
                 btCancel.setEnabled(!b);
-                cmd=ALL;
+                cmd = ALL;
                 break;
 
             case NONE:
@@ -422,8 +434,11 @@ public class Frame_C extends JFrame {
         //tf의 활성화 여부 결정..
 
     }
-    /**버튼 비활성화 메소드*/
-    public void intialBt(boolean b){
+
+    /**
+     * 버튼 비활성화 메소드
+     */
+    public void intialBt(boolean b) {
         btAdd.setEnabled(b);
         btUpdate.setEnabled(b);
         btDel.setEnabled(b);
@@ -431,8 +446,11 @@ public class Frame_C extends JFrame {
         btFind.setEnabled(b);
         btCancel.setEnabled(b);
     }
-    /**tf를 비워주는 메소드*/
-    public void clearTf(){
+
+    /**
+     * tf를 비워주는 메소드
+     */
+    public void clearTf() {
         tfNo.setText("");
         tfSno.setText("");
         tfId.setText("");
@@ -452,28 +470,31 @@ public class Frame_C extends JFrame {
         dto.setId(tfId.getText());
         dto.setName(tfName.getText());
         dto.setPhone(tfphone.getText());
+        dto.setPeriod(calculateDateDifference(tfregD.getText() , tfexD.getText()));
         dto.setRegD(tfregD.getText());
         dto.setExD(tfexD.getText());
 
 
         //유효성체크
-        if(dto.getId()==null||dto.getName() ==null
-                ||dto.getId().trim().equals("")
-                ||dto.getName().trim().equals("")){
+        if (dto.getId() == null || dto.getName() == null
+                || dto.getId().trim().equals("")
+                || dto.getName().trim().equals("")) {
             msg = "ID와 NAME값 입력하세요";
             JOptionPane.showMessageDialog(this, msg);
             return;
         }
         //중복성체크
-        if(dao.duplicateCheck(dto)){
+        if (dao.duplicateCheck(dto)) {
             msg = "중복된 ID입니다.";
             JOptionPane.showMessageDialog(this, msg);
             return;
         }
 
         int n = dao.insertMember(dto);
-        if(n>0) { msg = "회원가입성공";
-        }else { msg = "회원가입실패";
+        if (n > 0) {
+            msg = "회원가입성공";//입력받은 행의 수가 1이상이면 회원가입성공 메세지를 보냄
+        } else {
+            msg = "회원가입실패";//없을 시 회원가입 실패 메세지
         }
         JOptionPane.showMessageDialog(this, msg); //회원가입성공 메세지 팝업창 생성
         showData(ALL); //창에 회원가입 후 전체데이터 보여줌
@@ -486,56 +507,56 @@ public class Frame_C extends JFrame {
         String msg = "";
 
         dto.setId(tfId.getText());
-        dto.setName(tfName.getText());
-        dto.setRegD(tfregD.getText());
-        dto.setExD(tfexD.getText());
+        dto.setRegD(tfregD.getText().replaceAll("-", ""));
+        dto.setExD(tfexD.getText().replaceAll("-", ""));
+        dto.setPeriod(calculateDateDifference(dto.getRegD() , dto.getExD()));
 
         int n = dao.updateMember(dto);
-        if(n>0) { msg = "회원정보 수정성공";
-        }else { msg = "회원정보 수정실패";
+        if (n > 0) {
+            msg = "회원정보 수정성공";
+        } else {
+            msg = "회원정보 수정실패";
         }
         JOptionPane.showMessageDialog(this, msg);
         showData(ALL);
     }
 
-    public void showData(int n) {
+    public void showData(int n) {//
 
-        dao.setPeriod(dto);
         dao.setWarning(
 
         );
 
         CustomerDTO[] arr = null;//자료가 몇개가 될 지 모르므로 null 설정
-        if(n==ALL) { //모두보기
-            arr=dao.selectAll();
-        }else if(n==FIND) { //이름 검색
+        if (n == ALL) { //모두보기
+            arr = dao.selectAll();
+        } else if (n == FIND) { //이름 검색
             String name = tfName.getText();
 
             arr = dao.selectByName(name);
         }
-        if(arr== null ) {
+        if (arr == null) {
             JOptionPane.showMessageDialog(this, "현재 등록된 회원 없음.");
             return;
         }
-        String[] colNames = {"회원번호","락커번호", "아이디", "이름", "전화번호",
+        String[] colNames = {"회원번호", "락커번호", "아이디", "이름", "전화번호",
                 "등록일", "만료일", "남은기간", "만료임박"};
         String[][] data = new String[arr.length][9];
         //insert, delet 등등으로 길이가 항상 변하므로 길이가 [arr.length]가 됨
 
-        for(int i=0; i< data.length; i++) {
-            data[i][0] = arr[i].getNo()+"";  //+"" 로 문자열로 만들어줌
+        for (int i = 0; i < data.length; i++) {
+            data[i][0] = arr[i].getNo() + "";  //+"" 로 문자열로 만들어줌
             data[i][1] = arr[i].getSno();
             data[i][2] = arr[i].getId();
             data[i][3] = arr[i].getName();
             data[i][4] = arr[i].getPhone();
             data[i][5] = arr[i].getRegD();
             data[i][6] = arr[i].getExD();
-            data[i][7] = arr[i].getPeriod()+"";
+            data[i][7] = arr[i].getPeriod() + "";
             data[i][8] = arr[i].getWarning();
         }
         model.setDataVector(data, colNames);
         table.setModel(model);
-
 
 
     }
@@ -548,7 +569,7 @@ public class Frame_C extends JFrame {
         String msg = "";
 
         //유효성체크
-        if(id ==null||id.trim().equals("")){  //trim = 공백제거
+        if (id == null || id.trim().equals("")) {  //trim = 공백제거
             msg = "삭제할 ID를 입력하세요";
             tfId.requestFocus();
             JOptionPane.showMessageDialog(this, msg);
@@ -557,13 +578,14 @@ public class Frame_C extends JFrame {
         msg = "정말 " + id + "님의 정보를 삭제하시겠습니까?";
         int yn = JOptionPane.showConfirmDialog(this, msg);
         // MessageDialog와 차이점 : 팝업 창에 예,아니오,취소 세가지 버튼이 추가됨
-        if(yn == JOptionPane.YES_OPTION) {
+        if (yn == JOptionPane.YES_OPTION) {
             //삭제성공 혹은 삭제실패 확인
             int isDel = dao.deleteMember(id.trim()); //호출 후 삭제 성공 혹은 삭제 실패 메세지 생성
-            if(isDel>0) {
+            if (isDel > 0) {
                 msg = "회원삭제성공";
             } else {
-                msg = "회원삭제실패";}
+                msg = "회원삭제실패";
+            }
             JOptionPane.showMessageDialog(this, msg); //회원삭제성공 메세지 팝업창 생성
             showData(ALL); //창에 회원삭제 후 전체데이터 보여줌
             dao.deleteSeat(id);
@@ -572,4 +594,17 @@ public class Frame_C extends JFrame {
     }
 
 
+
+    // 문자열을 LocalDate 형식으로 변환
+    public LocalDate convertStringToLocalDate(String dateStr) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        return LocalDate.parse(dateStr, formatter);
+    }
+
+    // 두 날짜의 차이를 계산
+    public int calculateDateDifference(String startDateStr, String endDateStr) {
+        LocalDate startDate = convertStringToLocalDate(startDateStr);
+        LocalDate endDate = convertStringToLocalDate(endDateStr);
+        return (int) ChronoUnit.DAYS.between(startDate, endDate);
+    }
 }
