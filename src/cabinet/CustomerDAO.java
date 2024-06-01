@@ -1,11 +1,8 @@
 package cabinet;
 
 import java.beans.Statement;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.Arrays;
 import java.util.Vector;
 
 //import db.ConnectionTest;
@@ -50,21 +47,21 @@ public class CustomerDAO {
         return result;//영향을 받은 행의 수를 리턴
     }
 
-    public boolean duplicateCheck(CustomerDTO dto) {
+    public boolean duplicateCheck(CustomerDTO dto) {//customer의 데이터를 받아온다
 
-        String sql = "SELECT id FROM STUDYROOM_1 WHERE id=?";
+        String sql = "SELECT id FROM STUDYROOM_1 WHERE id=?";//아이디를 입력받아 STUDYROOM_1에서 id를 표시한다
 
         try {
 
-            ps = con.prepareStatement(sql);
-            ps.setString(1, dto.getId());
-            rs = ps.executeQuery();
+            ps = con.prepareStatement(sql);//sql문을 실행시킬 준비를 한다.
+            ps.setString(1, dto.getId());//customer id데이터를 쿼리의 입력값으로 설정한다
+            rs = ps.executeQuery();//업데이트한 쿼리문을 rs에 저장한다.
             boolean isExist = rs.next();     /*rs의 위치에 있는지 없는지*/
-            if(isExist)
-                return true;
+            if(isExist)//같은 id가 있으면
+                return true;//true리턴
         } catch (SQLException e) {
         }
-        return false;
+        return false;//아무것도 없으면 false리턴
     }
 
     public int updateMember(CustomerDTO dto) {
@@ -95,12 +92,13 @@ public class CustomerDAO {
 
     public Customer_DateManager[] dateManager() {
 
-        String sql2 = "SELECT NO, PERIOD FROM STUDYROOM_1";
+        String sql2 = "SELECT NO, PERIOD FROM STUDYROOM_1";//STUDYROOM_1에서 no와 period 찾기
 
         try {
-            ps = con.prepareStatement(sql2);
-            rs = ps.executeQuery();
-            Customer_DateManager[] cdm = makeArrayDate(rs);
+            ps = con.prepareStatement(sql2);//sql문을 실행시킬 준비
+            rs = ps.executeQuery();//쿼리문을 실행
+            System.out.println(rs.getRow());
+            Customer_DateManager[] cdm = makeArrayDate(rs);//데이터 크기만큼 배열 생성
             return cdm;
         } catch (Exception e) {
             System.out.println("검색 실패:"+e.getMessage());
@@ -111,15 +109,15 @@ public class CustomerDAO {
     public void setWarning() {
 
         Customer_DateManager[] cdm = null;
-        cdm = dateManager();
-        int [][] data = new int[cdm.length][2];
-        for(int i=0; i< data.length; i++) {
-            data[i][0] = cdm[i].getNo();
-            data[i][1] = cdm[i].getPeriod();
+        cdm = dateManager();//회원 번호와 기간이 담긴 배열을 저장
+        int [][] data = new int[cdm.length][2];//data에 cdm배열의 크기와 no와 period데이터를 담을 2차원 배열 생성
+        for(int i=0; i< data.length; i++) {//data크기만큼 반복
+            data[i][0] = cdm[i].getNo();//cdm[i] 번째 no를 data에 저장
+            data[i][1] = cdm[i].getPeriod();//cdm[i] 번째 period를 data에 저장
         }
 
-        for(int i=0; i<data.length; i++) {
-            if(data[i][1] < 6) {
+        for(int i=0; i<data.length; i++) {//data크기만큼 반복
+            if(data[i][1] < 6) {//
                 String sql3 = "UPDATE studyroom_1 set WARNING= '만료임박' WHERE NO = ?";
                 try {
                     ps = con.prepareStatement(sql3);
@@ -195,17 +193,17 @@ public class CustomerDAO {
     }
 
     public Customer_DateManager[] makeArrayDate(ResultSet rs) throws SQLException {
-        Vector<Customer_DateManager> list = new Vector<Customer_DateManager>();
-        Customer_DateManager cdm = null;
-        while(rs.next()) {
-            cdm=new Customer_DateManager();
-            cdm.setNo(rs.getInt("no"));
-            cdm.setPeriod(rs.getInt("period"));
-            list.add(cdm);
+        Vector<Customer_DateManager> list = new Vector<Customer_DateManager>();//회원 번호와 기간의 정보가담긴 객체를 배열로 선언한다
+        while(rs.next()) {//저장된 다음 쿼리문이 있을 때 까지
+            Customer_DateManager cdm =new Customer_DateManager();//cdm에 회원 번호와 기간의 데이터를 저장하는 객체 생성
+            cdm.setNo(rs.getInt("no"));//저장된 쿼리문에서 컬럼이 no인 데이터를 cdm에 설정
+            cdm.setPeriod(rs.getInt("period"));//저장된 쿼리문에서 컬럼이 period인 데이터를 cdm에 설정
+            list.add(cdm);//list에 설정한 데이터를 삽입
         }
+        //memarr에 no와 perido의 입력된 데이터 수 만큼의 배열을 가진 객체 생성
         Customer_DateManager[] memArr = new Customer_DateManager[list.size()];
-        list.copyInto(memArr);
-        return memArr;
+        list.copyInto(memArr);//vector에 있는 자료의 크기만큼 배열을 지정
+        return memArr;//memarr에 no와 perido의 입력된 데이터 수 만큼의 배열을 리턴
     }
 
     public int deleteMember(String id) {

@@ -56,7 +56,7 @@ public class Frame_C extends JFrame {
     CustomerDAO dao = new CustomerDAO();//cutomer의 정보를 db랑 주고받는 객체 추가
     DefaultTableModel model
             = new DefaultTableModel();//테이블 데이터 관리를 하는 객체 추가
-
+    //버튼을 컨트롤하는 변수선언
     public static final int NONE = 0;
     public static final int ADD = 1;
     public static final int DEL = 2;
@@ -119,11 +119,13 @@ public class Frame_C extends JFrame {
                 System.out.println("row : " + row + "행(");
                 setTitle(row + "행");//?
 
-                for (int i = 0; i < 8; i++) {
+
+
+                for (int i = 0; i < 8; i++) {//열의 개수만큼 반복
                     Object obj
-                            = table.getValueAt(row, i);
-                    String objStr = obj.toString();
-                    switch (i) {
+                            = table.getValueAt(row, i);//테이블의 선택한 행의 i열을 obj에 저장(모든 자료형을 저장하기 위해 object 자료형으로 선언)
+                    String objStr = obj.toString();//object 자료형을로 선언된 obj를 문자열 objStr로 형변환
+                    switch (i) {//선택한 행의 i 열의 데이터를 반복문을 사용해서 순서대로 textfield에 저장한다
                         case 0:
                             tfNo.setText(objStr);
                             break;
@@ -157,15 +159,15 @@ public class Frame_C extends JFrame {
                 }//for----------
             }
         });
-        btAdd.setBackground(Color.PINK);
-        btAdd.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Add actionPerformed()");
-                if (cmd != ADD) {  //모든 메뉴중에 ADD를 마우스로 클릭했을때
-                    setEnabled(ADD);
-                    tfSno.requestFocus();//커서
-                } else {
-                    add();
+        btAdd.setBackground(Color.PINK);//add버튼의 배경색을 분홍색으로 지정
+        btAdd.addActionListener(new ActionListener() {//add버튼에 동작을 감지한다
+            public void actionPerformed(ActionEvent e) {//동작이 감지되면
+                System.out.println("Add actionPerformed()");//출력
+                if (cmd != ADD) {  //모든 메뉴중에 ADD를 마우스로 클릭했을때 cmd = 0 add = 1
+                    setEnabled(ADD);//버튼을 활성화 시키고 cmd -> 1로 치환
+                    tfSno.requestFocus();//커서를 sno 텍스트 필드로 이동
+                } else {//cmd = 1 add = 1
+                    add();//회원정보를 추가
                     setEnabled(NONE);
                     cmd = NONE;
                     initialTf();
@@ -398,12 +400,12 @@ public class Frame_C extends JFrame {
      */
     public void setEnabled(int n) {
         boolean b = false;
-        this.intialBt(b);
-        switch (n) {
+        this.intialBt(b);//모든 버튼을 비활성화
+        switch (n) {//
             case ADD:
-                btAdd.setEnabled(!b);
-                btCancel.setEnabled(!b);
-                cmd = ADD;
+                btAdd.setEnabled(!b);//add버튼 활성화
+                btCancel.setEnabled(!b);//cancel버튼 활성화
+                cmd = ADD; //cmd = 1
                 break;
             case UPDATE:
                 btUpdate.setEnabled(!b);
@@ -466,31 +468,32 @@ public class Frame_C extends JFrame {
 
         String msg = "";
 
-        dto.setSno(tfSno.getText());
-        dto.setId(tfId.getText());
-        dto.setName(tfName.getText());
-        dto.setPhone(tfphone.getText());
+        dto.setSno(tfSno.getText());//sno텍스트 필드에서 입력받은 데이터를 customer 객체의 sno에 설정
+        dto.setId(tfId.getText());//id텍스트 필드에서 입력받은 데이터를 customer 객체의 id에 설정
+        dto.setName(tfName.getText());//name텍스트 필드에서 입력받은 데이터를 customer 객체의 name에 설정
+        dto.setPhone(tfphone.getText());//phone텍스트 필드에서 입력받은 데이터를 customer 객체의 phone에 설정
+        dto.setRegD(tfregD.getText());//regD텍스트 필드에서 입력받은 데이터를 customer 객체의 regD에 설정
+        dto.setExD(tfexD.getText());//exD텍스트 필드에서 입력받은 데이터를 cutomer 객체의 exD에 설정
+        //tegd, exD텍스트 필드의 값을 calculateDateDifference 메소드를 사용해서 날짜의 차이를 period에 설정
         dto.setPeriod(calculateDateDifference(tfregD.getText() , tfexD.getText()));
-        dto.setRegD(tfregD.getText());
-        dto.setExD(tfexD.getText());
-
 
         //유효성체크
+        //아이디와 비밀번호의 데이터가 null이거나 공백이거나 아이디와 비밀번호에 공백이 존재하면
         if (dto.getId() == null || dto.getName() == null
                 || dto.getId().trim().equals("")
                 || dto.getName().trim().equals("")) {
             msg = "ID와 NAME값 입력하세요";
             JOptionPane.showMessageDialog(this, msg);
-            return;
+            return;//메소드를 종료시키고 호출한 곳으로 돌아간다
         }
         //중복성체크
-        if (dao.duplicateCheck(dto)) {
+        if (dao.duplicateCheck(dto)) {//중복이 있어 true를 받아오면
             msg = "중복된 ID입니다.";
             JOptionPane.showMessageDialog(this, msg);
             return;
         }
 
-        int n = dao.insertMember(dto);
+        int n = dao.insertMember(dto);//입력에 성공하면 1 실패하면 0
         if (n > 0) {
             msg = "회원가입성공";//입력받은 행의 수가 1이상이면 회원가입성공 메세지를 보냄
         } else {
@@ -521,7 +524,7 @@ public class Frame_C extends JFrame {
         showData(ALL);
     }
 
-    public void showData(int n) {//
+    public void showData(int n) {//all=4
 
         dao.setWarning(
 
@@ -596,15 +599,15 @@ public class Frame_C extends JFrame {
 
 
     // 문자열을 LocalDate 형식으로 변환
-    public LocalDate convertStringToLocalDate(String dateStr) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        return LocalDate.parse(dateStr, formatter);
+    public LocalDate convertStringToLocalDate(String dateStr) {//문자열로된 yyyymmdd 형식의 날짜를 받아온다(입력값은 날짜 형식이여야함)
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");//문자열을 yyyymmdd 날짜 형식으로 변환
+        return LocalDate.parse(dateStr, formatter);//문자열을 local데이터 객체로 변환하고 변환된 날짜형식을 리턴한다
     }
 
     // 두 날짜의 차이를 계산
-    public int calculateDateDifference(String startDateStr, String endDateStr) {
-        LocalDate startDate = convertStringToLocalDate(startDateStr);
-        LocalDate endDate = convertStringToLocalDate(endDateStr);
-        return (int) ChronoUnit.DAYS.between(startDate, endDate);
+    public int calculateDateDifference(String startDateStr, String endDateStr) {//시작 날짜와 끝나는 날짜를 문자열로 받아온다
+        LocalDate startDate = convertStringToLocalDate(startDateStr);//문자열로된 시작 날짜를 날짜형식으로 변환후 localdate 자료형으로 저장
+        LocalDate endDate = convertStringToLocalDate(endDateStr);//문자열로된 끝나는 날짜를 날짜형식으로 변환후 localdate 자료형으로 저장
+        return (int) ChronoUnit.DAYS.between(startDate, endDate);//시작날짜와 끝나는 날짜의 차이를 계산 후 정수형으로 형변환해서 리턴
     }
 }

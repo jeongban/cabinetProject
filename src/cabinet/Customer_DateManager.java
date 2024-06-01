@@ -2,8 +2,8 @@ package cabinet;
 
 public class Customer_DateManager {
 
-    private int no;
-    private int period;
+    private int no;//회원번호
+    private int period;//남은기간
 
 
     public int getNo() {
