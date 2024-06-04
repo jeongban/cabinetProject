@@ -14,35 +14,33 @@ import javax.swing.table.*;
 public class Frame_CS extends JFrame {
 
 
-    JTabbedPane jtp = new JTabbedPane();//탭을 생성
+    JTabbedPane jtp = new JTabbedPane();
 
-    JPanel contentPane2 = new JPanel();//panel생성
+    JPanel contentPane2 = new JPanel();
 
-    //텍스트가 적힌 라벨과 내용을 적을 필드 생성
-    private final JLabel lblNewLabel = new JLabel("ROOM_NUMBER");
+
+    private final JLabel lblNewLabel = new JLabel("위치");
     private final JTextField tfRno = new JTextField();
-    private final JLabel label = new JLabel("SEAT_NUMBER");
+    private final JLabel label = new JLabel("락커번호");
     private final JTextField tfSno = new JTextField();
-    private final JLabel label_1 = new JLabel("STATE");
+    private final JLabel label_1 = new JLabel("사용유무");
     private final JTextField tfState = new JTextField();
-    private final JLabel label_2 = new JLabel("ID");
+    private final JLabel label_2 = new JLabel("아이디");
     private final JTextField tfId = new JTextField();
-    private final JLabel label_3 = new JLabel("PERIOD");
+    private final JLabel label_3 = new JLabel("남은 기간");
     private final JTextField tfPeriod = new JTextField();
-    //스크롤 생성
+
     private final JScrollPane scrollPane = new JScrollPane();
-    //테이블(표) 생성
     private final JTable table = new JTable();
-    //버튼 생성
-    private final JButton btAdd = new JButton("ADD");
-    private final JButton btFind = new JButton("FIND");
-    private final JButton btAll = new JButton("All");
-    private final JButton btDel = new JButton("DELETE");
-    private final JButton btCancel = new JButton("CANCEL");
-    //방 이름이 적힌 라벨 생성
-    private final JLabel lblRoom = new JLabel("ROOM 410");
-    private final JLabel lblRoom_1 = new JLabel("ROOM 420");
-    //pannel 생성
+
+    private final JButton btAdd = new JButton("추가");
+    private final JButton btFind = new JButton("조회");
+    private final JButton btAll = new JButton("전체보기");
+    private final JButton btDel = new JButton("삭제");
+    private final JButton btCancel = new JButton("취소");
+
+    private final JLabel lblRoom = new JLabel("1F");
+    //private final JLabel lblRoom_1 = new JLabel("ROOM 420");
     private final JPanel panel_1 = new JPanel();
     private final JPanel panel_2 = new JPanel();
     private final JPanel panel_3 = new JPanel();
@@ -51,15 +49,16 @@ public class Frame_CS extends JFrame {
     private final JPanel panel_6 = new JPanel();
     private final JPanel panel_7 = new JPanel();
     private final JPanel panel_8 = new JPanel();
-    //버튼을 배열로 생성
+
     private final JButton[] buttons_410_1 = new JButton[10];
     private final JButton[] buttons_410_2 = new JButton[10];
     private final JButton[] buttons_410_3 = new JButton[10];
     private final JButton[] buttons_410_4 = new JButton[10];
+    //room420
     private final JButton[] buttons_420 = new JButton[10];
 
 
-    SeatDTO dto=new SeatDTO();//좌석 정보를 생성
+    SeatDTO dto=new SeatDTO();
     SeatDAO dao=new SeatDAO();
     DefaultTableModel model
             =new DefaultTableModel();
@@ -78,8 +77,8 @@ public class Frame_CS extends JFrame {
     public Frame_CS() {
         Frame_C c= new Frame_C();
 
-        jtp.addTab("Customer", Frame_C.contentPane1);
-        jtp.addTab("Seat", contentPane2);
+        jtp.addTab("회원정보", Frame_C.contentPane1);
+        jtp.addTab("락커정보", contentPane2);
         getContentPane().add(jtp);
 
 
@@ -92,8 +91,8 @@ public class Frame_CS extends JFrame {
             System.out.println("DB연결 실패"+e.getMessage());
         }//db와 커넥션
         //////////////////
-        model.addColumn("방 번호");
-        model.addColumn("자리번호");
+        model.addColumn("위치");
+        model.addColumn("락커번호");
         model.addColumn("사용유무");
         model.addColumn("아이디");
         model.addColumn("남은기간");
@@ -102,8 +101,7 @@ public class Frame_CS extends JFrame {
         table.setModel(model);
         table.getTableHeader().setBackground(
                 Color.PINK);
-        table.getTableHeader().setForeground(
-                Color.DARK_GRAY);
+
         table.getTableHeader().setReorderingAllowed(false);
         table.setRowHeight(20);
         initialTf();
@@ -119,8 +117,8 @@ public class Frame_CS extends JFrame {
         xpos = (int)(dimen1.getWidth()/2-dimen2.getWidth()/2);
         ypos = (int)(dimen1.getHeight()/2-dimen2.getHeight()/2);
         this.setLocation(xpos,ypos);
-        this.setTitle("StudyRoom");
-        setIconImage(Toolkit.getDefaultToolkit().getImage("D:\\images\\Book.jpg"));
+        this.setTitle("Admin login");
+        setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\project\\src\\images\\3.jpg"));
         this.setVisible(true);
 
         initGUI();
@@ -168,7 +166,7 @@ public class Frame_CS extends JFrame {
             }
         });
 
-        btAdd.setBackground(Color.PINK);
+        btAdd.setBackground(Color.pink);
         btAdd.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Add actionPerformed()");
@@ -185,7 +183,7 @@ public class Frame_CS extends JFrame {
                 }
             }
         });
-        btFind.setBackground(Color.PINK);
+        btFind.setBackground(Color.pink);
         btFind.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Find actionPerformed()");
@@ -202,8 +200,8 @@ public class Frame_CS extends JFrame {
                 }
             }
         });
-        btAll.setBackground(Color.PINK);
-        btAll.setText("ALL");
+        btAll.setBackground(Color.pink);
+        btAll.setText("전체보기");
         btAll.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("All actionPerformed()");
@@ -213,8 +211,8 @@ public class Frame_CS extends JFrame {
                 showData(ALL);
             }
         });
-        btDel.setBackground(Color.PINK);
-        btDel.setText("DELETE");
+        btDel.setBackground(Color.pink);
+        btDel.setText("삭제");
         btDel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Delete actionPerformed()");
@@ -230,8 +228,8 @@ public class Frame_CS extends JFrame {
                 }
             }
         });
-        btCancel.setBackground(Color.PINK);
-        btCancel.setText("CANCEL");
+        btCancel.setBackground(Color.pink);
+        btCancel.setText("취소");
         btCancel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("actionPerformed()");
@@ -247,75 +245,81 @@ public class Frame_CS extends JFrame {
         contentPane2.setLayout(null);
 
         this.setResizable(true); //frame 크기 임의 설정(false)시 불가
-        this.setSize(1100,700); //frame 사이즈 설정 method
+        this.setSize(1000,700); //frame 사이즈 설정 method
         this.setLocationRelativeTo(null);// 창 가운데 생성코드
 
 
-        this.lblNewLabel.setBounds(14, 10, 100, 28);
+        this.lblNewLabel.setBounds(140, 5, 100, 28);
+        lblNewLabel.setForeground(Color.PINK);
         contentPane2.add(this.lblNewLabel);
-        this.tfRno.setBounds(12, 38, 128, 28);
+        this.tfRno.setBounds(140, 33, 128, 28);
         this.tfRno.setColumns(10);
         contentPane2.add(this.tfRno);               //Rno
 
-        this.label.setBounds(14, 66, 100, 28);
+        this.label.setBounds(290, 5, 100, 28);
+        label.setForeground(Color.PINK);
         contentPane2.add(this.label);
         this.tfSno.setColumns(10);
-        this.tfSno.setBounds(12, 94, 128, 28);
+        this.tfSno.setBounds(290, 33, 128, 28);
         contentPane2.add(this.tfSno);                //Sno
 
-        this.label_1.setBounds(12, 122, 73, 28);
+        this.label_1.setBounds(440, 5, 73, 28);
+        label_1.setForeground(Color.PINK);
         contentPane2.add(this.label_1);
         this.tfState.setColumns(10);
-        this.tfState.setBounds(12, 150, 128, 28);
+        this.tfState.setBounds(440, 33, 128, 28);
         contentPane2.add(this.tfState);              //setState
 
-        this.label_2.setBounds(12, 178, 73, 28);
+        this.label_2.setBounds(590, 5, 73, 28);
+        label_2.setForeground(Color.PINK);
         contentPane2.add(this.label_2);
         this.tfId.setColumns(10);
-        this.tfId.setBounds(12, 206, 128, 28);
+        this.tfId.setBounds(590, 33, 128, 28);
         contentPane2.add(this.tfId);              //Id
 
-        this.label_3.setBounds(12, 234, 73, 28);
+        this.label_3.setBounds(740, 5, 73, 28);
+        label_3.setForeground(Color.PINK);
         contentPane2.add(this.label_3);
         this.tfPeriod.setColumns(10);
-        this.tfPeriod.setBounds(12, 262, 128, 28);
+        this.tfPeriod.setBounds(740, 33, 128, 28);
         contentPane2.add(this.tfPeriod);                //Period
 
 
 
         //안쪽 자료 나오는 결과 테이블
-        this.scrollPane.setBounds(239, 66, 500, 226);
+        this.scrollPane.setBounds(239, 70, 500, 226);
         contentPane2.add(this.scrollPane);
 
         this.scrollPane.setViewportView(this.table);
 
-        this.btAdd.setBounds(239, 34, 85, 33);
+        this.btAdd.setBounds(738, 70, 85, 30);
         contentPane2.add(this.btAdd);
 
-        this.btFind.setBounds(322, 34, 85, 33);
+        this.btFind.setBounds(738, 103, 85, 30);
         contentPane2.add(this.btFind);
 
-        this.btAll.setBounds(405, 34, 85, 33);
+        this.btAll.setBounds(738, 136, 85, 30);
         contentPane2.add(this.btAll);
 
-        this.btDel.setBounds(488, 34, 85, 33);
+        this.btDel.setBounds(738, 169, 85, 30);
         contentPane2.add(this.btDel);
 
-        this.btCancel.setBounds(571, 34, 85, 33);
+        this.btCancel.setBounds(738, 202, 85, 30
+        );
         contentPane2.add(this.btCancel);
 
         //410글자필드라벨
         lblRoom.setBounds(239, 312, 73, 28);
         contentPane2.add(lblRoom);
         //420글자필드라벨
-        lblRoom_1.setBounds(774, 312, 73, 28);
-        contentPane2.add(lblRoom_1);
+        //lblRoom_1.setBounds(774, 312, 73, 28);
+        //contentPane2.add(lblRoom_1);
 
 
         //room 410
 
         //1~10번째 좌석묶음
-        panel_2.setBackground(SystemColor.controlHighlight);
+
         panel_2.setBounds(239, 341, 95, 242);
         contentPane2.add(panel_2);
         panel_2.setLayout(new GridLayout(5, 2, 2, 2));
@@ -326,11 +330,11 @@ public class Frame_CS extends JFrame {
             buttons_410_1[i].setBackground(Color.PINK);
             buttons_410_1[i].setFont(new Font("굴림", Font.BOLD, 9));
         }
-        panel_3.setBackground(SystemColor.controlHighlight);
+
         panel_3.setBounds(334, 341, 40, 242);
         contentPane2.add(panel_3);
         //11~20번째 좌석묶음
-        panel_4.setBackground(SystemColor.controlHighlight);
+
         panel_4.setBounds(374, 341, 95, 242);
         contentPane2.add(panel_4);
         panel_4.setLayout(new GridLayout(5, 2, 2, 2));
@@ -341,11 +345,11 @@ public class Frame_CS extends JFrame {
             buttons_410_2[i].setBackground(Color.PINK);
             buttons_410_2[i].setFont(new Font("굴림", Font.BOLD, 9));
         }
-        panel_5.setBackground(SystemColor.controlHighlight);
+
         panel_5.setBounds(469, 341, 40, 242);
         contentPane2.add(panel_5);
         //21~30번째 좌석묶음
-        panel_6.setBackground(SystemColor.controlHighlight);
+
         panel_6.setBounds(509, 341, 95, 242);
         contentPane2.add(panel_6);
         panel_6.setLayout(new GridLayout(5, 2, 2, 2));
@@ -356,11 +360,11 @@ public class Frame_CS extends JFrame {
             buttons_410_3[i].setBackground(Color.PINK);
             buttons_410_3[i].setFont(new Font("굴림", Font.BOLD, 9));
         }
-        panel_7.setBackground(SystemColor.controlHighlight);
+
         panel_7.setBounds(604, 341, 40, 242);
         contentPane2.add(panel_7);
         //31~40번째 좌석묶음
-        panel_8.setBackground(SystemColor.controlHighlight);
+
         panel_8.setBounds(644, 341, 95, 242);
         contentPane2.add(panel_8);
         panel_8.setLayout(new GridLayout(5, 2, 2, 2));
@@ -372,6 +376,7 @@ public class Frame_CS extends JFrame {
             buttons_410_4[i].setFont(new Font("굴림", Font.BOLD, 9));
         }
         //room420
+        /*
         contentPane2.add(panel_1);
         panel_1.setBackground(SystemColor.controlHighlight);
         panel_1.setBounds(774, 341, 253, 242);
@@ -382,8 +387,9 @@ public class Frame_CS extends JFrame {
             panel_1.add(buttons_420[i]);
             buttons_420[i].setBackground(Color.PINK);
         }
+        */
 
-        lblBG.setIcon(new ImageIcon("D:\\images\\study6.jpg"));
+        lblBG.setIcon(new ImageIcon("C:\\project\\src\\images\\3.jpg"));
         lblBG.setBounds(0, -46, 1100, 700);
         contentPane2.add(lblBG);
     }
@@ -405,34 +411,45 @@ public class Frame_CS extends JFrame {
             int Sno = Integer.parseInt(data[i][1]);
             int period = Integer.parseInt(data[i][4]);
 
-            if(data[i][2] != null) {
-                if(1 <=Sno && Sno <= 10) {
-                    buttons_410_1[Sno-1].setBackground(Color.CYAN);
-
-                }else if(11 <=Sno && Sno <= 20){
-                    buttons_410_2[Sno-11].setBackground(Color.CYAN);
-                }else if(21 <=Sno && Sno <= 30) {
-                    buttons_410_3[Sno-21].setBackground(Color.CYAN);
-                }else if(31 <=Sno && Sno <= 40) {
-                    buttons_410_4[Sno-31].setBackground(Color.CYAN);
-                }else if(41 <=Sno &&Sno <= 50) {
-                    buttons_420[Sno-41].setBackground(Color.CYAN);
-                }else{
-                    buttons_410_1[Sno-1].setBackground(Color.PINK);
-                    buttons_410_2[Sno-11].setBackground(Color.PINK);
-                    buttons_410_3[Sno-21].setBackground(Color.PINK);
-                    buttons_410_4[Sno-31].setBackground(Color.PINK);
-                    buttons_420[Sno-41].setBackground(Color.PINK);
+            if(1 <=Sno && Sno <= 10) {
+                buttons_410_1[Sno-1].setBackground(Color.pink);
+                if(period>=6) { buttons_410_1[Sno-1].setBackground(Color.cyan);}
+                else if (period >0 && period<6) {
+                    buttons_410_1[Sno-1].setBackground(Color.red);
                 }
+            }else if(11 <=Sno && Sno <= 20){
+                buttons_410_2[Sno-11].setBackground(Color.pink);
+                if(period>=6) { buttons_410_2[Sno-11].setBackground(Color.cyan);}
+                else if (period >0 && period<6) {
+                    buttons_410_2[Sno-11].setBackground(Color.red);
+                }
+            }else if(21 <=Sno && Sno <= 30) {
+                buttons_410_3[Sno-21].setBackground(Color.pink);
+                if(period>=6) { buttons_410_3[Sno-21].setBackground(Color.cyan);}
+                else if (period >0 && period<6) {
+                    buttons_410_3[Sno-21].setBackground(Color.red);
+                }
+            }else if(31 <=Sno && Sno <= 40) {
+                buttons_410_4[Sno-31].setBackground(Color.pink);
+                if(period>=6) { buttons_410_4[Sno-31].setBackground(Color.cyan);}
+                else if (period >0 && period<6) {
+                    buttons_410_4[Sno-41].setBackground(Color.red);
+                }
+            }
+                /*else if(41 <=Sno &&Sno <= 50) {
+                    buttons_420[Sno-41].setBackground(Color.CYAN);
+                    if(period<6) { buttons_420[Sno-41].setBackground(Color.RED);}
+                }
+                */
+            else{
 
-
-            }else{
                 buttons_410_1[Sno-1].setBackground(Color.PINK);
                 buttons_410_2[Sno-11].setBackground(Color.PINK);
                 buttons_410_3[Sno-21].setBackground(Color.PINK);
                 buttons_410_4[Sno-31].setBackground(Color.PINK);
-                buttons_420[Sno-41].setBackground(Color.PINK);
+                //buttons_420[Sno-41].setBackground(Color.PINK);
             }
+
         }//for
     }
 
@@ -461,6 +478,7 @@ public class Frame_CS extends JFrame {
                 break;
             case DEL:// 좌석번호로 삭제
                 tfSno.setEditable(!b);
+
                 break;
             case NONE:
             case ALL:
@@ -570,7 +588,7 @@ public class Frame_CS extends JFrame {
             JOptionPane.showMessageDialog(this, "현재 등록된 회원 없음.");
             return;
         }
-        String[] colNames = {"방 번호", "자리번호", "사용유무", "아이디",
+        String[] colNames = {"방 번호", "락커번호", "사용유무", "아이디",
                 "남은기간"};
         String[][] data = new String[arr.length][5];
         //insert, delet 등등으로 길이가 항상 변하므로 길이가 [arr.length]가 됨

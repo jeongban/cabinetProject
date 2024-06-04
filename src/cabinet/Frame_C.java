@@ -19,23 +19,23 @@ public class Frame_C extends JFrame {
 
     static JPanel contentPane1 = new JPanel();//customer의 정보를 관리하는 panel추가
     //글씨가 적힌 label과 텍스트를 적을 textfield추가
-    private final JLabel lblNewLabel = new JLabel("NO");//
+    private final JLabel lblNewLabel = new JLabel("회원번호");//
     private final JTextField tfNo = new JTextField();
-    private final JLabel label = new JLabel("Sno");
+    private final JLabel label = new JLabel("락커번호");
     private final JTextField tfSno = new JTextField();
-    private final JLabel label_1 = new JLabel("ID");
+    private final JLabel label_1 = new JLabel("아이디");
     private final JTextField tfId = new JTextField();
-    private final JLabel label_2 = new JLabel("NAME");
+    private final JLabel label_2 = new JLabel("이름");
     private final JTextField tfName = new JTextField();
-    private final JLabel label_3 = new JLabel("phone");
+    private final JLabel label_3 = new JLabel("전화번호");
     private final JTextField tfphone = new JTextField();
-    private final JLabel label_4 = new JLabel("regD");
+    private final JLabel label_4 = new JLabel("등록일");
     private final JTextField tfregD = new JTextField();
-    private final JLabel label_5 = new JLabel("exD");
+    private final JLabel label_5 = new JLabel("만료일");
     private final JTextField tfexD = new JTextField();
-    private final JLabel label_6 = new JLabel("period");
+    private final JLabel label_6 = new JLabel("남은 기간");
     private final JTextField tfperiod = new JTextField();
-    private final JLabel label_7 = new JLabel("warning");
+    private final JLabel label_7 = new JLabel("만료 임박");
     private final JTextField tfwarning = new JTextField();
 
     //////////////////////////////////////////////////////////
@@ -45,12 +45,12 @@ public class Frame_C extends JFrame {
     private final JTable table = new JTable();
     //////////////////////////////////////////////////////////
     //버튼 추가
-    private final JButton btAdd = new JButton("ADD");
-    private final JButton btUpdate = new JButton("UPDATE");
-    private final JButton btFind = new JButton("FIND");
-    private final JButton btAll = new JButton("All");
-    private final JButton btDel = new JButton("DELETE");
-    private final JButton btCancel = new JButton("CANCEL");
+    private final JButton btAdd = new JButton("추가하기");
+    private final JButton btUpdate = new JButton("수정하기");
+    private final JButton btFind = new JButton("회원찾기");
+    private final JButton btAll = new JButton("전체출력");
+    private final JButton btDel = new JButton("삭제하기");
+    private final JButton btCancel = new JButton("취소");
 
     CustomerDTO dto = new CustomerDTO();//customer의 정보를 설정하는 객체 추가
     CustomerDAO dao = new CustomerDAO();//cutomer의 정보를 db랑 주고받는 객체 추가
@@ -209,7 +209,7 @@ public class Frame_C extends JFrame {
             }
         });
         btAll.setBackground(Color.PINK);
-        btAll.setText("ALL");
+        btAll.setText("전체출력");
         btAll.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("All actionPerformed()");
@@ -220,7 +220,7 @@ public class Frame_C extends JFrame {
             }
         });
         btDel.setBackground(Color.PINK);
-        btDel.setText("DELETE");
+        btDel.setText("삭제하기");
         btDel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Delete actionPerformed()");
@@ -237,7 +237,7 @@ public class Frame_C extends JFrame {
             }
         });
         btCancel.setBackground(Color.PINK);
-        btCancel.setText("CANCEL");
+        btCancel.setText("취소");
         btCancel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("actionPerformed()");
@@ -254,91 +254,100 @@ public class Frame_C extends JFrame {
         contentPane1.setLayout(null);
 
         this.setResizable(true); //frame 크기 임의 설정(false)시 불가
-        this.setSize(1100, 700); //frame 사이즈 설정 method
+        this.setSize(1000, 700); //frame 사이즈 설정 method
         this.setLocationRelativeTo(null);// 창 가운데 생성코드
 
 
         //왼쪽 텍스트필드
-        this.lblNewLabel.setBounds(12, 10, 73, 28);
+        this.lblNewLabel.setBounds(150, 10, 73, 28);
+        lblNewLabel.setForeground(Color.PINK);
         contentPane1.add(this.lblNewLabel);
-        this.tfNo.setBounds(12, 38, 128, 28);
+        this.tfNo.setBounds(140, 40, 128, 28);
         this.tfNo.setColumns(10);
         contentPane1.add(this.tfNo);               //no
 
-        this.label.setBounds(12, 66, 73, 28);
+        this.label.setBounds(350, 10, 73, 28);
+        label.setForeground(Color.PINK);
         contentPane1.add(this.label);
         this.tfSno.setColumns(10);
-        this.tfSno.setBounds(12, 94, 128, 28);
+        this.tfSno.setBounds(340, 40, 128, 28);
         contentPane1.add(this.tfSno);                //Sno
 
-        this.label_1.setBounds(12, 122, 73, 28);
+        this.label_1.setBounds(550, 10, 73, 28);
+        label_1.setForeground(Color.PINK);
         contentPane1.add(this.label_1);
         this.tfId.setColumns(10);
-        this.tfId.setBounds(12, 150, 128, 28);
+        this.tfId.setBounds(540, 40, 128, 28);
         contentPane1.add(this.tfId);              //Id
 
-        this.label_2.setBounds(12, 178, 73, 28);
+        this.label_2.setBounds(150, 90, 73, 28);
+        label_2.setForeground(Color.PINK);
         contentPane1.add(this.label_2);
         this.tfName.setColumns(10);
-        this.tfName.setBounds(12, 206, 128, 28);
+        this.tfName.setBounds(140, 120, 128, 28);
         contentPane1.add(this.tfName);              //Name
 
-        this.label_3.setBounds(12, 234, 73, 28);
+        this.label_3.setBounds(350, 90, 73, 28);
+        label_3.setForeground(Color.PINK);
         contentPane1.add(this.label_3);
         this.tfphone.setColumns(10);
-        this.tfphone.setBounds(12, 262, 128, 28);
+        this.tfphone.setBounds(340, 120, 128, 28);
         contentPane1.add(this.tfphone);                //phone
 
-        this.label_4.setBounds(12, 290, 73, 28);
+        this.label_4.setBounds(550, 90, 73, 28);
+        label_4.setForeground(Color.PINK);
         contentPane1.add(this.label_4);
         this.tfregD.setColumns(10);
-        this.tfregD.setBounds(12, 318, 128, 28);
+        this.tfregD.setBounds(540, 120, 128, 28);
         contentPane1.add(this.tfregD);                 //regD
 
-        this.label_5.setBounds(12, 346, 73, 28);
+        this.label_5.setBounds(150, 170, 73, 28);
+        label_5.setForeground(Color.PINK);
         contentPane1.add(this.label_5);
         this.tfexD.setColumns(10);
-        this.tfexD.setBounds(12, 374, 128, 28);
+        this.tfexD.setBounds(140, 200, 128, 28);
         contentPane1.add(this.tfexD);              //exD
 
-        this.label_6.setBounds(12, 402, 73, 28);
+        this.label_6.setBounds(350, 170, 73, 28);
+        label_6.setForeground(Color.PINK);
         contentPane1.add(this.label_6);
         this.tfperiod.setColumns(10);
-        this.tfperiod.setBounds(12, 430, 128, 28);
+        this.tfperiod.setBounds(340, 200, 128, 28);
         contentPane1.add(this.tfperiod);              //period
 
-        this.label_7.setBounds(12, 458, 73, 28);
+        this.label_7.setBounds(550, 170, 73, 28);
+        label_7.setForeground(Color.PINK);
         contentPane1.add(this.label_7);
         this.tfwarning.setColumns(10);
-        this.tfwarning.setBounds(12, 486, 128, 28);
+        this.tfwarning.setBounds(540, 200, 128, 28);
         contentPane1.add(this.tfwarning);              //warning
 
         //안쪽 자료 나오는 결과 테이블
-        this.scrollPane.setBounds(239, 66, 700, 226);
+        this.scrollPane.setBounds(139, 300, 700, 226);
         contentPane1.add(this.scrollPane);
 
         this.scrollPane.setViewportView(this.table);
 
-        this.btAdd.setBounds(239, 34, 85, 33);
+        this.btAdd.setBounds(750, 40, 85, 30);
         contentPane1.add(this.btAdd);
 
-        this.btUpdate.setBounds(322, 34, 85, 33);
+        this.btUpdate.setBounds(750, 73, 85, 30);
         contentPane1.add(this.btUpdate);
 
-        this.btFind.setBounds(405, 34, 85, 33);
+        this.btFind.setBounds(750, 106, 85, 30);
         contentPane1.add(this.btFind);
 
-        this.btAll.setBounds(488, 34, 85, 33);
+        this.btAll.setBounds(750, 139, 85, 30);
         contentPane1.add(this.btAll);
 
-        this.btDel.setBounds(571, 34, 85, 33);
+        this.btDel.setBounds(750, 172, 85, 30);
         contentPane1.add(this.btDel);
 
-        this.btCancel.setBounds(654, 34, 85, 33);
+        this.btCancel.setBounds(750, 205, 85, 30);
         contentPane1.add(this.btCancel);
 
         lblBG.setBackground(Color.PINK);
-        lblBG.setIcon(new ImageIcon("D:\\images\\study6.jpg"));
+        lblBG.setIcon(new ImageIcon("C:\\project\\src\\images\\3.jpg"));
         lblBG.setBounds(0, -46, 1100, 700);
         contentPane1.add(lblBG);
 
@@ -351,13 +360,21 @@ public class Frame_C extends JFrame {
         boolean b = false;
         tfNo.setEditable(b);
         tfSno.setEditable(b);
+
         tfId.setEditable(b);
+
         tfName.setEditable(b);
+
         tfphone.setEditable(b);
+
         tfregD.setEditable(b);
+
         tfexD.setEditable(b);
+
         tfperiod.setEditable(b);
+
         tfwarning.setEditable(b);
+
 
     }//initialTf()--------
 
@@ -367,21 +384,24 @@ public class Frame_C extends JFrame {
         boolean b = false;
         switch (n) {
             case ADD:
+
                 tfId.setEditable(!b);
                 tfSno.setEditable(!b);
                 tfName.setEditable(!b);
                 tfphone.setEditable(!b);
                 tfregD.setEditable(!b);
                 tfexD.setEditable(!b);
-                tfwarning.setEditable(b);
+
                 break;
             case UPDATE:
+
                 tfId.setEditable(!b);
                 tfregD.setEditable(!b);
                 tfexD.setEditable(!b);
                 break;
             case FIND://이름으로 검색
                 tfName.setEditable(!b);
+
                 break;
             case DEL:// 아이디로 삭제
                 tfId.setEditable(!b);
@@ -526,9 +546,7 @@ public class Frame_C extends JFrame {
 
     public void showData(int n) {//all=4
 
-        dao.setWarning(
-
-        );
+        dao.setWarning();
 
         CustomerDTO[] arr = null;//자료가 몇개가 될 지 모르므로 null 설정
         if (n == ALL) { //모두보기
@@ -610,4 +628,9 @@ public class Frame_C extends JFrame {
         LocalDate endDate = convertStringToLocalDate(endDateStr);//문자열로된 끝나는 날짜를 날짜형식으로 변환후 localdate 자료형으로 저장
         return (int) ChronoUnit.DAYS.between(startDate, endDate);//시작날짜와 끝나는 날짜의 차이를 계산 후 정수형으로 형변환해서 리턴
     }
+    public void showPrint() {
+
+    }
+
+
 }

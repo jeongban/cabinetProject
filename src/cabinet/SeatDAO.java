@@ -28,14 +28,13 @@ public class SeatDAO {
 
     public int updateSeatInfo(SeatDTO dto) {//좌석의 정보를 받아서 좌석 설정을 수정하는 기능
         String sql = "UPDATE STUDYROOM_2 SET STATE = ?, "//STUDYROOM_2 테이블에서 STATE, ID, PERIOD, SNUMBER를 입력 받아 STATE, ID, PERIOD값을 변경한다.
-                +"ID = ?,PERIOD = ? WHERE SNUMBER = ?";
+                +"ID = ? WHERE SNUMBER = ?";
         int result = 0;
         try {
             ps = con.prepareStatement(sql);
             ps.setString(1,"사용중");//state -> 사용중
             ps.setString(2, dto.getId());//id -> 입력한 아이디
-            ps.setString(3, dto.getPeriod()+"");//PERIOD -> 입력한 문자열 period
-            ps.setString(4, dto.getSno());//SNUMBER -> 입력한 SNUMBER
+            ps.setString(3, dto.getSno());//SNUMBER -> 입력한 SNUMBER
             result = ps.executeUpdate();//쿼리문 업데이트
         } catch (SQLException e) {
             e.printStackTrace(); // 예외 메시지 기록
